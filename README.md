@@ -3,7 +3,7 @@ PHP를 사용한 DATABASE 명세서 생성 프로그램
 XLSX 파일로 만들어짐
 
 ## test version
-PHP 5.2.17 (linux)
+PHP 5.5.38 (linux)
 PHP 7.1.5 (WIN)
 
 ## require module
