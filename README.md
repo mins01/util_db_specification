@@ -2,6 +2,12 @@
 * PHP를 사용한 DATABASE 명세서 생성 프로그램
 * XLSX 파일로 만들어짐
 
+# USE
+## CLI
+php cli.php host user password dabatase
+## WEB
+http://~~~/util_db_specification/index.php
+
 # github
 https://github.com/mins01/util_db_specification
 
