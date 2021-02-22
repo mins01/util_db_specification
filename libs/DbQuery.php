@@ -16,10 +16,19 @@ class DbQuery{
 
 	function connect($host,$user,$password,$database,$mysql_lib_type=null){
 		if($mysql_lib_type==null && class_exists('Mysqli') || $mysql_lib_type=='mysqli'){
-			$this->mysqli =  new mysqli($host,$user,$password,$database);
+			$this->mysqli =  new mysqli();
+			$f = @$this->mysqli->connect($host,$user,$password,$database);
+			if(isset($this->mysqli->connect_error[0])){
+				echo $this->mysqli->connect_error.PHP_EOL;
+				exit(0);
+			}
 			$this->mysqli->set_charset('utf8');
 		}else if($mysql_lib_type==null && function_exists('mysql_connect')|| $mysql_lib_type=='mysql'){
 			$this->mysql =  mysql_connect($host,$user,$password);
+			// if(!$this->mysql){
+			// 	echo 'mysql connect error'.PHP_EOL;
+			// 	exit(0);
+			// }
 			mysql_set_charset('utf8');
 			mysql_select_db($database,$this->mysql);
 		}else{
