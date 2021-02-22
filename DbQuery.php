@@ -51,8 +51,14 @@ class DbQuery{
 			}
 		}else if(isset($this->mysql)){
 			$rs = mysql_query($sql,$this->mysql);
-			while ($row = mysql_fetch_assoc($rs)) {
-			 $rows[] = $row;
+			if(mysql_errno($this->mysql)){
+				echo mysql_errno($this->mysql) . ": " . mysql_error($this->mysql) . PHP_EOL;
+				exit(0);
+			}else if($rs===true){
+			}else{
+				while ($row = mysql_fetch_assoc($rs)) {
+				 $rows[] = $row;
+				}
 			}
 		}else{
 			exit('Not Supported mysql_*, Mysqli!');
