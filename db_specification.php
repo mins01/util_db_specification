@@ -87,7 +87,7 @@ $sheet->setCellValue('C9', date('Y-m-d H:i:s'));
 
 // 두번째 시트에 테이블 목록을 넣음
 //$objPHPExcel->createSheet(null);
-$border = [ 'borders' => [ 'allborders' => [ 'style' => PHPExcel_Style_Border::BORDER_THIN ] ] ];
+$border = array( 'borders' => array( 'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
 
 $i0++;
 $sheet = $objPHPExcel->getSheet($i0);

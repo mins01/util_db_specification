@@ -544,7 +544,8 @@ class PHPExcel_Reader_Excel2007 extends PHPExcel_Reader_Abstract implements PHPE
                             self::readStyle($objStyle, $style);
                             $excel->addCellXf($objStyle);
                         }
-                        foreach (isset($xmlStyles->cellStyleXfs->xf) ? $xmlStyles->cellStyleXfs->xf : [] as $xf) {
+												// foreach (isset($xmlStyles->cellStyleXfs->xf) ? $xmlStyles->cellStyleXfs->xf : [] as $xf) {
+                        foreach (isset($xmlStyles->cellStyleXfs->xf) ? $xmlStyles->cellStyleXfs->xf : array() as $xf) {
                             $numFmt = PHPExcel_Style_NumberFormat::FORMAT_GENERAL;
                             if ($numFmts && $xf["numFmtId"]) {
                                 $tmpNumFmt = self::getArrayItem($numFmts->xpath("sml:numFmt[@numFmtId=$xf[numFmtId]]"));
