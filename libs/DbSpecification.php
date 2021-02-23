@@ -11,8 +11,6 @@ class DbSpecification{
 
 	public function generateExcelObject($host,$user,$password,$database,$mysql_lib_type=null)
 	{
-		$tmstr = date('ymdhis');
-		$filename = "[DB명세서]{$database}($tmstr)";
 		$dbquery = new DbQuery($host,$user,$password,$database,$mysql_lib_type);
 
 		//--- 동작 DBNAME 설정
