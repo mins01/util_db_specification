@@ -74,7 +74,7 @@ class DbSpecification{
 
 		//-- 기본 설정
 		$objPHPExcel->getDefaultStyle()->getFont()->setSize(10); //기본크기 10pt
-		$objPHPExcel->getDefaultStyle()->getAlignment()->setWrapText(true); //자동 줄 바꿈		
+		$objPHPExcel->getDefaultStyle()->getAlignment()->setWrapText(true); //자동 줄 바꿈
 
 		// 최초 시트에 기본 정보 기입
 		$i0 = 0;
