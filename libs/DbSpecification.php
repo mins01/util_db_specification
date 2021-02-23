@@ -39,7 +39,7 @@ class DbSpecification{
 		a.TABLE_NAME,
 		b.ORDINAL_POSITION,
 		b.COLUMN_NAME,
-		b.DATA_TYPE,
+		#b.DATA_TYPE,
 		b.COLUMN_TYPE,
 		b.COLUMN_KEY,
 		b.IS_NULLABLE,
@@ -66,25 +66,29 @@ class DbSpecification{
 		// Set document properties
 		$objPHPExcel->getProperties()->setCreator("created by db_specification")
 		->setLastModifiedBy("created by db_specification")
-		->setTitle("{$database} 명세서")
-		->setSubject("{$database} 명세서")
-		->setDescription("{$database} 명세서")
-		->setKeywords("데이터베이스 명세서")
-		->setCategory("데이터베이스 명세서");
+		->setTitle("{$database} 정의서")
+		->setSubject("{$database} 정의서")
+		->setDescription("{$database} 정의서")
+		->setKeywords("데이터베이스 정의서")
+		->setCategory("데이터베이스 정의서");
+
+		//-- 기본 설정
+		$objPHPExcel->getDefaultStyle()->getFont()->setSize(10); //기본크기 10pt
+		$objPHPExcel->getDefaultStyle()->getAlignment()->setWrapText(true); //자동 줄 바꿈		
 
 		// 최초 시트에 기본 정보 기입
 		$i0 = 0;
 		$sheet = $objPHPExcel->getSheet($i0);
-		$sheet->setTitle("{$database} 명세서");
-		$sheet->setCellValue('C2', "{$database} 데이터베이스 명세서");
-		$sheet->setCellValue('C5', "{$host}");
-		$sheet->setCellValue('C6', "{$user}");
-		$sheet->setCellValue('C7', "{$database}");
-		$sheet->setCellValue('C9', date('Y-m-d H:i:s'));
+		$sheet->setTitle("{$database} 정의서");
+		$sheet->setCellValue('C4', "{$database} 데이터베이스 정의서");
+		$sheet->setCellValue('C7', "{$host}");
+		$sheet->setCellValue('C8', "{$user}");
+		$sheet->setCellValue('C9', "{$database}");
+		$sheet->setCellValue('C11', date('Y-m-d H:i:s'));
 
 		// 두번째 시트에 테이블 목록을 넣음
 		//$objPHPExcel->createSheet(null);
-		$border = array( 'borders' => array( 'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) ) );
+		$borderStyle = array( 'borders' => array( 'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) )	);
 
 		$i0++;
 		$sheet = $objPHPExcel->getSheet($i0);
@@ -96,7 +100,7 @@ class DbSpecification{
 			->setCellValue('B'.$icnt, $rs['table']['TABLE_NAME'])
 			->setCellValue('C'.$icnt, $rs['table']['TABLE_COMMENT'])
 			->setCellValue('D'.$icnt, $rs['table']['CREATE_TIME']);
-			$sheet->getStyle('A'.$icnt.':D'.$icnt)->applyFromArray($border);
+			$sheet->getStyle('A'.$icnt.':D'.$icnt)->applyFromArray($borderStyle);
 			$sheet->getStyle('A'.$icnt.':D'.$icnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 		}
 		// 세번째 시트부터 테이블 구조를 넣음
@@ -116,19 +120,19 @@ class DbSpecification{
 			$sheet->setCellValue('G2', $rs['table']['TABLE_COMMENT']);
 
 
-			$cicnt = 4;
+			$cicnt = 5;
 			foreach ($rs['columns'] as $crows) {
 				$sheet->setCellValue('A'.$cicnt, $crows['ORDINAL_POSITION'])
 				->setCellValue('B'.$cicnt, $crows['COLUMN_NAME'])
-				->setCellValue('C'.$cicnt, $crows['DATA_TYPE'])
-				->setCellValue('D'.$cicnt, $crows['COLUMN_TYPE'])
-				->setCellValue('E'.$cicnt, $crows['COLUMN_KEY'])
-				->setCellValue('F'.$cicnt, $crows['IS_NULLABLE'])
-				->setCellValue('G'.$cicnt, $crows['EXTRA'])
-				->setCellValue('H'.$cicnt, $crows['COLUMN_DEFAULT'])
-				->setCellValue('I'.$cicnt, $crows['COLUMN_COMMENT']);
-				$sheet->getStyle('A'.$cicnt.':I'.$cicnt)->applyFromArray($border);
-				$sheet->getStyle('A'.$cicnt.':I'.$cicnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+				// ->setCellValue('C'.$cicnt, $crows['DATA_TYPE'])
+				->setCellValue('C'.$cicnt, $crows['COLUMN_TYPE'])
+				->setCellValue('D'.$cicnt, $crows['COLUMN_KEY'])
+				->setCellValue('E'.$cicnt, $crows['IS_NULLABLE'])
+				->setCellValue('F'.$cicnt, $crows['EXTRA'])
+				->setCellValue('G'.$cicnt, $crows['COLUMN_DEFAULT'])
+				->setCellValue('H'.$cicnt, $crows['COLUMN_COMMENT']);
+				$sheet->getStyle('A'.$cicnt.':H'.$cicnt)->applyFromArray($borderStyle);
+				$sheet->getStyle('A'.$cicnt.':H'.$cicnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 				$cicnt++;
 			}
 			// $sheet->setTitle($r['table']['TABLE_NAME']);
