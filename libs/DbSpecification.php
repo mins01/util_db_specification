@@ -83,8 +83,8 @@ class DbSpecification{
 		// 최초 시트에 기본 정보 기입
 		$i0 = 0;
 		$sheet = $objPHPExcel->getSheet($i0);
-		$sheet->setTitle("{$database} 정의서");
-		$sheet->setCellValue('C4', "{$database} 데이터베이스 정의서");
+		// $sheet->setTitle("{$database} 정의서"); //"표지"로 고정함
+		$sheet->setCellValue('C4', "데이터베이스 {$database} 정의서");
 		$sheet->setCellValue('C7', "{$host}");
 		$sheet->setCellValue('C8', "{$user}");
 		$sheet->setCellValue('C9', "{$database}");
@@ -92,7 +92,12 @@ class DbSpecification{
 
 		// 두번째 시트에 테이블 목록을 넣음
 		//$objPHPExcel->createSheet(null);
-		$borderStyle = array( 'borders' => array( 'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) )	);
+		$borderStyle = array(
+			'borders' => array(
+				'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ),
+				'color' => array('rgb' => '000000'),
+			)
+		);
 		$linkStyle = array(
 		    'font'  => array(
 		        'bold'  => true,
@@ -108,8 +113,8 @@ class DbSpecification{
 			$icnt++;
 			$sheet->setCellValue('A'.$icnt, ($icnt-1))
 			->setCellValue('B'.$icnt, $rs['table']['TABLE_NAME'])
-			->setCellValue('C'.$icnt, $rs['table']['TABLE_COMMENT'])
-			->setCellValue('D'.$icnt, $rs['table']['CREATE_TIME']);
+			->setCellValue('C'.$icnt, $rs['table']['TABLE_COMMENT']);
+			// ->setCellValue('D'.$icnt, $rs['table']['CREATE_TIME']); //미사용로 바뀜
 			$sheet->getStyle('A'.$icnt.':D'.$icnt)->applyFromArray($borderStyle);
 			$sheet->getStyle('A'.$icnt.':D'.$icnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 
@@ -131,25 +136,25 @@ class DbSpecification{
 			$objPHPExcel->addSheet($sheet);
 			$icnt++;
 
-			$sheet->setCellValue('D1', $database);
-			$sheet->setCellValue('G1', $rs['table']['TABLE_NAME']);
-			$sheet->setCellValue('D2', $rs['table']['CREATE_TIME']);
-			$sheet->setCellValue('G2', $rs['table']['TABLE_COMMENT']);
+			// $sheet->setCellValue('D1', $database);
+			$sheet->setCellValue('C4', $rs['table']['TABLE_NAME']);
+			// $sheet->setCellValue('D2', $rs['table']['CREATE_TIME']);
+			$sheet->setCellValue('H4', $rs['table']['TABLE_COMMENT']);
 
 
-			$cicnt = 5;
+			$cicnt = 7;
 			foreach ($rs['columns'] as $crows) {
 				$sheet->setCellValue('A'.$cicnt, $crows['ORDINAL_POSITION'])
 				->setCellValue('B'.$cicnt, $crows['COLUMN_NAME'])
 				// ->setCellValue('C'.$cicnt, $crows['DATA_TYPE'])
-				->setCellValue('C'.$cicnt, $crows['COLUMN_TYPE'])
-				->setCellValue('D'.$cicnt, $crows['COLUMN_KEY'])
-				->setCellValue('E'.$cicnt, $crows['IS_NULLABLE'])
-				->setCellValue('F'.$cicnt, $crows['EXTRA'])
-				->setCellValue('G'.$cicnt, $crows['COLUMN_DEFAULT'])
-				->setCellValue('H'.$cicnt, $crows['COLUMN_COMMENT']);
-				$sheet->getStyle('A'.$cicnt.':H'.$cicnt)->applyFromArray($borderStyle);
-				$sheet->getStyle('A'.$cicnt.':H'.$cicnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+				->setCellValue('D'.$cicnt, $crows['COLUMN_TYPE'])
+				->setCellValue('E'.$cicnt, $crows['COLUMN_KEY'])
+				->setCellValue('F'.$cicnt, $crows['IS_NULLABLE'])
+				->setCellValue('G'.$cicnt, $crows['EXTRA'])
+				->setCellValue('H'.$cicnt, $crows['COLUMN_DEFAULT'])
+				->setCellValue('I'.$cicnt, $crows['COLUMN_COMMENT']);
+				$sheet->getStyle('A'.$cicnt.':I'.$cicnt)->applyFromArray($borderStyle);
+				$sheet->getStyle('A'.$cicnt.':I'.$cicnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
 				$cicnt++;
 			}
 			// $sheet->setTitle($r['table']['TABLE_NAME']);
