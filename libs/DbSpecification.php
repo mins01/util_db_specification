@@ -9,6 +9,10 @@ class DbSpecification{
 
 	}
 
+	public function getSheetName($icnt,$TABLE_NAME){
+		$t = sprintf('%03d',$icnt);
+		return iconv_substr("{$t})".$TABLE_NAME,0,30);
+	}
 	public function generateExcelObject($host,$user,$password,$database,$mysql_lib_type=null)
 	{
 		$dbquery = new DbQuery($host,$user,$password,$database,$mysql_lib_type);
@@ -89,6 +93,12 @@ class DbSpecification{
 		// 두번째 시트에 테이블 목록을 넣음
 		//$objPHPExcel->createSheet(null);
 		$borderStyle = array( 'borders' => array( 'allborders' => array( 'style' => PHPExcel_Style_Border::BORDER_THIN ) )	);
+		$linkStyle = array(
+		    'font'  => array(
+		        'bold'  => true,
+		        'color' => array('rgb' => '0000ff'),
+						"underline" => true,
+		    ));
 
 		$i0++;
 		$sheet = $objPHPExcel->getSheet($i0);
@@ -102,6 +112,12 @@ class DbSpecification{
 			->setCellValue('D'.$icnt, $rs['table']['CREATE_TIME']);
 			$sheet->getStyle('A'.$icnt.':D'.$icnt)->applyFromArray($borderStyle);
 			$sheet->getStyle('A'.$icnt.':D'.$icnt)->getNumberFormat()->setFormatCode( PHPExcel_Style_NumberFormat::FORMAT_TEXT );
+
+			$t = $this->getSheetName(($icnt-1),$rs['table']['TABLE_NAME']);
+			$sheet->getCell('B'.$icnt)->getHyperlink()->setUrl("sheet://'{$t}'!A1");
+			$sheet->getStyle('B'.$icnt.':B'.$icnt)->applyFromArray($linkStyle);
+
+
 		}
 		// 세번째 시트부터 테이블 구조를 넣음
 		$icnt = 1;
@@ -109,8 +125,9 @@ class DbSpecification{
 			// $sheet = $objPHPExcel->createSheet(null)->copy();
 			$sheet = $objPHPExcel->getSheet(2)->copy();
 			// $sheet->setTitle($r['table']['TABLE_NAME']);
-			$t = sprintf('%03d',$icnt);
-			$sheet->setTitle(iconv_substr("{$t} ".$rs['table']['TABLE_NAME'],0,30));
+
+			$t = $this->getSheetName($icnt,$rs['table']['TABLE_NAME']);
+			$sheet->setTitle($t);
 			$objPHPExcel->addSheet($sheet);
 			$icnt++;
 
