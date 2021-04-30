@@ -16,8 +16,12 @@ class DbQuery{
 
 	function connect($host,$user,$password,$database,$mysql_lib_type=null){
 		if($mysql_lib_type==null && class_exists('Mysqli') || $mysql_lib_type=='mysqli'){
+			$port = 3306;
+			if(strpos($host,':')!==false){
+				list($host,$port) = explode(':',$host,2);
+			}
 			$this->mysqli =  new mysqli();
-			$f = @$this->mysqli->connect($host,$user,$password,$database);
+			$f = $this->mysqli->connect($host,$user,$password,$database,$port);
 			if(isset($this->mysqli->connect_error[0])){
 				echo $this->mysqli->connect_error.PHP_EOL;
 				exit(0);
